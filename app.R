@@ -1,18 +1,20 @@
 # app.R
-# Librerías para la interfaz de usuario de Shiny
+
+# Libraries for the Shiny user interface
 library(shiny)
-library(shinydashboard) # Para un diseño de dashboard estructurado
-library(shinyjs)        # Para funcionalidades JavaScript
+library(shinydashboard) # For a structured dashboard layout
+library(shinyjs)        # For JavaScript functionalities
 
-# Librerías para manipulación y procesamiento de datos
-library(tidyverse)      # Incluye dplyr, tidyr, ggplot2, readr, stringr, forcats, purrr
-# Nota: dplyr, tidyr, readr, stringr ya están cubiertas por tidyverse
-# Magrittr también es parte del tidyverse y sus pipes se exportan.
+# Libraries for data manipulation and processing
+library(tidyverse)      # Includes dplyr, tidyr, ggplot2, readr, stringr, forcats, purrr
+# Note: dplyr, tidyr, readr, stringr are already covered by tidyverse
+# Magrittr is also part of tidyverse and its pipes are exported.
 
-# Librerías específicas que pueden no estar en tidyverse
-library(magrittr)       # Para el operador pipe si no usas todo el tidyverse 
-library(fs)             # Para operaciones del sistema de archivos
-library(data.table)     # Para lectura/escritura de datos de forma eficiente
+# Specific libraries that might not be in tidyverse
+library(magrittr)       # For the pipe operator if not using all of tidyverse
+library(fs)             # For file system operations
+library(data.table)     # For efficient data reading/writing (e.g., fwrite)
+
 
 # Load functions from processing scripts
 # Make sure scripts are in a 'scripts' folder or in the same directory.

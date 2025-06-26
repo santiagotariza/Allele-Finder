@@ -42,7 +42,7 @@ Allele-Finder is a robust R-based application designed to streamline the process
 ```
 
 -   **Root Directory (.):** This is the main project folder where app.R and main.R should be located. All other paths are relative to this root.
--   **scripts/:** Contains the modular R scripts for each processing step, enhancing code organization and reusability.
+-   **scripts/:** Contains the modular R scripts for each processing step, enhancing code organization and re-usability.
 -   **input\_\* directories:** Designated for your raw input data files.
 -   **output\* directories:** Automatically created by the program to store intermediate and final processed results.
 
@@ -51,8 +51,17 @@ Allele-Finder is a robust R-based application designed to streamline the process
 Allele-Finder utilizes `renv` for robust package management, ensuring a reproducible environment across different machines.
 
 1.  **Install R and RStudio:** If you don't have them, download and install the latest versions of [R](https://cran.r-project.org/) and [RStudio Desktop](https://posit.co/download/rstudio-desktop/) for your operating system.
-    -   **For Windows users:** If you plan to install R packages that require compilation (e.g., those with C, C++, or Fortran code, like `curl` or many `tidyverse` dependencies), you will also need to install **RTools**. Download the appropriate version of RTools for your R installation from <https://cran.r-project.org/bin/windows/Rtools/> and follow the installation instructions.
-2.  **Clone the Repository:** Clone this GitHub repository to your local machine: `bash     git clone https://github.com/santiagotariza/Allele-Finder/Allele-Finder.git` `bash     cd Allele-Finder`
+    -   **For Windows users:** If you plan to install R packages that require compilation (e.g., those with C, C++, or FORTRAN code, like `curl` or many `tidyverse` dependencies), you will also need to install **RTools**. Download the appropriate version of RTools for your R installation from <https://cran.r-project.org/bin/windows/Rtools/> and follow the installation instructions.
+2.  **Clone the Repository:** Clone this GitHub repository to your local machine:
+
+``` bash
+git clone https://github.com/santiagotariza/Allele-Finder/Allele-Finder.git
+```
+
+``` bash
+cd Allele-Finder
+```
+
 3.  **Open Project and Restore Dependencies:**
     -   Open the `.Rproj` file (`Allele-Finder.Rproj`) in RStudio.
     -   **That's all for dependency setup!** The project is configured to automatically install `renv` (if needed) and restore all required packages when you open the project. You will see messages in the RStudio console indicating the restoration progress.
@@ -64,11 +73,11 @@ Allele-Finder utilizes `renv` for robust package management, ensuring a reproduc
     -   Place your `AT*.csv` file(s) for the database in the `input_db/` folder.
     -   Place your CNV `.csv` files in the `input_cnvs/` folder.
     -   Place your sample `.zip` files in the `samples/` folder.
-2.  **Run the AlleleFinder Application:**
+2.  **Run the Allele-Finder Application:**
     -   In RStudio, open the `app.R` file.
     -   Click the "Run App" button in RStudio, or execute the following command in the R console: `R     shiny::runApp()`
 3.  **Interact with the App:**
-    -   The AlleleFinder application will open in your default web browser.
+    -   The Allele-Finder application will open in your default web browser.
     -   In the "Processing" tab, you can check the "Regenerate Database (create_db.R)" box if you want to rebuild `db.csv` from scratch.
     -   Click the "Run Complete Workflow" button to start the data processing pipeline.
     -   Monitor the "Processing Status" box for real-time updates and success/error messages.
