@@ -46,27 +46,6 @@ To ensure Allele-Finder runs correctly, please organize your project files as fo
 * **input_* directories:** Designated for your raw input data files.
 * **output* directories:** Automatically created by the program to store intermediate and final processed results.
 
-## **Repository Structure for GitHub**
-
-When uploading your project to GitHub (or any version control system), it's crucial to **exclude** large and system-specific files to keep the repository clean and portable. `renv` automatically generates a `.gitignore` file, but if you are uploading manually, please note the following:
-
-**Files and Folders you MUST INCLUDE in the repository:**
-
-* `app.R`
-* `main.R`
-* `scripts/` (and all its contents)
-* `Allele-Finder.Rproj`
-* `.Rprofile`
-* `renv.lock`
-* `renv/` (excluding the `renv/library/` subfolder)
-    * `renv/activate.R`
-    * `renv/settings.json` (if it exists)
-* `input_db/` (and any small example files)
-* `input_cnvs/` (and any small example files)
-* `samples/` (and any small example files)
-* `README.md`
-* `.gitignore` (if you are using Git)
-
 ## **Installation & Setup (Automated)**
 
 Allele-Finder utilizes `renv` for robust package management, ensuring a reproducible environment across different machines.
@@ -74,7 +53,7 @@ Allele-Finder utilizes `renv` for robust package management, ensuring a reproduc
 1.  **Install R and RStudio:** If you don't have them, download and install the latest versions of [R](https://cran.r-project.org/) and [RStudio Desktop](https://posit.co/download/rstudio-desktop/) for your operating system.
 2.  **Clone the Repository:** Clone this GitHub repository to your local machine:
     ```bash
-    git clone [https://github.com/santiagotariza/Allele-Finder/Allele-Finder.git](https://github.com/santiagotariza/Allele-Finder/Allele-Finder.git) 
+    git clone https://github.com/santiagotariza/Allele-Finder/Allele-Finder.git
     cd Allele-Finder
     ```
 3.  **Open Project and Restore Dependencies:**
