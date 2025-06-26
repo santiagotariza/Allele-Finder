@@ -15,7 +15,6 @@ Allele-Finder is a robust R-based application designed to streamline the process
 
 ## **Folder Structure (Local Project)**
 
-To ensure Allele-Finder runs correctly, please organize your project files as follows:
 .
 ├── app.R               # The Shiny application (user interface)
 ├── main.R              # Main script that orchestrates the execution flow
