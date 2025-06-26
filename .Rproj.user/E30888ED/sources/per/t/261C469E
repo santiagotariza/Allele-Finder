@@ -1,0 +1,26 @@
+{
+    "id": "261C469E",
+    "path": "~/Documents/Allele-Finder/scripts/create_db.R",
+    "project_path": "scripts/create_db.R",
+    "type": "r_source",
+    "hash": "3606831597",
+    "contents": "",
+    "dirty": false,
+    "created": 1750628287046.0,
+    "source_on_save": false,
+    "relative_order": 4,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "4,0",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1750929190,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1750929190939,
+    "read_only": false,
+    "read_only_alternatives": []
+}
