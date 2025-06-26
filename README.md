@@ -15,7 +15,29 @@ Allele-Finder is a robust R-based application designed to streamline the process
 
 ## **Folder Structure (Local Project)**
 
-.├── app.R               # The Shiny application (user interface)├── main.R              # Main script that orchestrates the execution flow├── scripts/            # Folder for individual processing functions│   ├── samples_processing.R│   ├── cnvs_processing.R│   ├── create_db.R│   ├── search.R│   └── filter.R├── input_db/           # Folder for the database input file (e.g., AT*.csv)├── input_cnvs/         # Folder for CNVs input files (e.g., .csv files)├── samples/            # Folder for sample .zip files (and where processed sample files are saved)├── db/                 # Folder where db.csv is saved (output of create_db.R)├── cnvs/               # Folder where cnvs.csv is saved (output of cnvs_processing.R)├── output/             # Folder where search files (_matches.csv) are saved└── output_processed/   # Folder where filtered files (_filtered.csv) are saved├── .Rprofile           # R configuration file (hidden, managed by renv)├── Allele-Finder.Rproj # RStudio project file├── renv/               # renv environment folder (hidden)│   ├── activate.R│   ├── settings.json (optional)│   └── library/        # The actual package library (SHOULD NOT BE UPLOADED TO GITHUB)├── renv.lock           # renv lockfile (crucial for reproducibility)└── README.md           # This file
+.
+├── app.R               \# The Shiny application (user interface)
+├── main.R              \# Main script that orchestrates the execution flow
+├── scripts/            \# Folder for individual processing functions
+│   ├── samples\_processing.R
+│   ├── cnvs\_processing.R
+│   ├── create\_db.R
+│   ├── search.R
+│   └── filter.R
+├── input\_db/           \# Folder for the database input file (e.g., AT\*.csv)
+├── input\_cnvs/         \# Folder for CNVs input files (e.g., .csv files)
+├── samples/            \# Folder for sample .zip files (and where processed sample files are saved)
+├── db/                 \# Folder where db.csv is saved (output of create\_db.R)
+├── cnvs/               \# Folder where cnvs.csv is saved (output of cnvs\_processing.R)
+├── output/             \# Folder where search files (\_matches.csv) are saved
+└── output\_processed/   \# Folder where filtered files (\_filtered.csv) are saved
+├── .Rprofile           \# R configuration file
+├── Allele-Finder.Rproj \# RStudio project file
+├── renv/               \# renv environment folder
+│   ├── activate.R
+│   ├── settings.json
+├── renv.lock           \# renv lockfile
+└── README.md           \# This file
 
 
 * **Root Directory (.):** This is the main project folder where app.R and main.R should be located. All other paths are relative to this root.
