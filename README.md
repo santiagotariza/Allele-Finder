@@ -29,6 +29,13 @@ Allele-Finder is a robust R-based application designed to streamline the process
 ├── input_cnvs/          # Folder for CNVs input files (e.g., .csv files)
 ├── samples/             # Folder for sample .zip files (and where processed sample files are saved)
 ├── db/                  # Folder where db.csv is saved (output of create_db.R)
+├── db_generation_scripts/        # Folder containing scripts for future db auto-generation (Still working on it :D)
+│   ├── 1_data_retrival.R
+│   ├── 2_data_format.R
+│   ├── 3_data_fill.R
+│   ├── 4_data_merge.R
+│   ├── 5_main_table.R
+│   └── 6_genotype_table_hyperboost
 ├── cnvs/                # Folder where cnvs.csv is saved (output of cnvs_processing.R)
 ├── output/              # Folder where search files (_matches.csv) are saved
 └── output_processed/    # Folder where filtered files (_filtered.csv) are saved
@@ -45,6 +52,7 @@ Allele-Finder is a robust R-based application designed to streamline the process
 -   **scripts/:** Contains the modular R scripts for each processing step, enhancing code organization and re-usability.
 -   **input\_\* directories:** Designated for your raw input data files.
 -   **output\* directories:** Automatically created by the program to store intermediate and final processed results.
+-   **db_generation_scripts/** Scripts for a future self-generate db implementation. (At the moment builds the whole table but needs to be adapted)
 
 ## **Installation & Setup (Automated)**
 
