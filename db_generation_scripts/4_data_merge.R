@@ -1,138 +1,153 @@
-# Configuración inicial
+# Load required libraries
 library(dplyr)
 library(tidyverse)
 
-# Rutas de los archivos
+# Define input and output directories
 input_folder_definitions <- "updated_data"
 input_folder_haplotypes <- "processed_data"
-genes <- c("CYP2C19", "CYP2C9", "CYP2D6", "CYP3A4", "CYP1A2", "CYP2B6")
-#genes <- c("CYP2C19", "CYP2C9", "CYP2D6", "CYP2B6")
-
 output_folder <- "merged_data"
 
-# Crear carpeta de salida si no existe
+# List of genes to process
+genes <- c("CYP2C19", "CYP2C9", "CYP2D6", "CYP3A4", "CYP1A2", "CYP2B6")
+
+# Create output directory if it does not exist
 if (!dir.exists(output_folder)) dir.create(output_folder)
 
-# Bases
-valid_bases <- c("A", "T", "C", "G")
-
-# Función principal
+# Main loop: process one gene at a time
 for (gene in genes) {
-  cat("\nProcesando gen:", gene, "\n")
+  cat("\n--- Processing gene:", gene, "---\n")
   
-  # Leer tablas
+  # Construct input file paths
   definition_file <- file.path(input_folder_definitions, paste0(gene, "_allele_definition_table.csv"))
   haplotype_file <- file.path(input_folder_haplotypes, paste0(gene, "_haplotypes_table.csv"))
   
+  # Load allele definition and haplotype tables
   definition_data <- read.csv(definition_file, stringsAsFactors = FALSE, check.names = FALSE)
   haplotype_data <- read.csv(haplotype_file, stringsAsFactors = FALSE, check.names = FALSE)
   
-  # Paso 1: Preparar la tabla de alelos
-  definition_data_filtered <- definition_data[ -c(0:4),] 
+  # ----------------------------------------------------------
+  # Step 1: Clean and prepare allele definition table
+  # ----------------------------------------------------------
+  
+  # The first 4 rows typically contain metadata or titles → remove them
+  definition_data_filtered <- definition_data[-c(0:4), ]
+  
+  # Set the first data row (formerly row 5) as the header
   colnames(definition_data_filtered) <- as.character(unlist(definition_data_filtered[1, ]))
-  definition_data_filtered <- definition_data_filtered[ -c(1,2),]
-  definition_data_head <- definition_data_filtered[1,]
   
-  # Paso 2: Preparar la tabla de haplotipos
-  haplotype_data_slimmed <- haplotype_data[, c(1,3,8)] %>%
-    filter(rsID != "-")  # Excluir filas donde rsID es "-"
+  # Remove the first and second rows (now redundant after setting column names)
+  definition_data_filtered <- definition_data_filtered[-c(1, 2), ]
   
-  # Identificar duplicados
+  # Save the first allele row (row 8 originally) as a "template" to fill NA values later
+  definition_data_head <- definition_data_filtered[1, ]
+  
+  # ----------------------------------------------------------
+  # Step 2: Process and reshape haplotype table
+  # ----------------------------------------------------------
+  
+  # Extract only relevant columns: haplotype name, rsID, and variant allele
+  haplotype_data_slimmed <- haplotype_data[, c(1, 3, 8)]
+  
+  # Remove rows where rsID is missing or invalid
+  haplotype_data_slimmed <- haplotype_data_slimmed %>% filter(rsID != "-")
+  
+  # Optional check for duplicates: same haplotype name and rsID
   duplicates <- haplotype_data_slimmed %>%
     group_by(`Haplotype Name`, rsID) %>%
     filter(n() > 1)
-  
   if (nrow(duplicates) > 0) {
-    cat("Duplicados encontrados:\n")
+    cat("Warning: duplicates found in haplotype data for", gene, "\n")
     print(duplicates)
   }
   
-  # Transformar la tabla a formato ancho
-  haplotype_shifted <- haplotype_data_slimmed %>%
+  # Reshape haplotype data to wide format: one row per haplotype, one column per rsID
+  haplotype_wide <- haplotype_data_slimmed %>%
     pivot_wider(
-      names_from = rsID,       # Los rsID serán las columnas
-      values_from = 'Variant Allele'  # Los valores en las celdas serán los valores de Variant Allele
+      names_from = rsID,
+      values_from = `Variant Allele`
     )
   
-  cat("Nombres de las columnas de haplotype_data:\n")
-  print(colnames(haplotype_data))
+  # Rename "Haplotype Name" column to "rsID" to align with allele table
+  haplotype_wide <- haplotype_wide %>% rename(rsID = `Haplotype Name`)
   
-  # Renombrar una columna
-  haplotype_shifted <- haplotype_shifted %>% rename( rsID = 'Haplotype Name')
-  
-  # Crear una expresión regular que combine todos los genes
+  # Remove gene name prefix from haplotype identifiers (e.g., "CYP2C19*1" → "*1")
   pattern <- paste0("(", paste(genes, collapse = "|"), ")")
+  haplotype_wide$rsID <- gsub(pattern, "", haplotype_wide$rsID)
   
-  # Eliminar el patrón
-  haplotype_shifted$rsID <- gsub(pattern, "", haplotype_shifted$rsID)
+  # ----------------------------------------------------------
+  # Step 3: Align haplotype columns to allele definition format
+  # ----------------------------------------------------------
   
-  # Obtener el orden de columnas deseado
+  # Get correct rsID column order from the definition template
   rsid_order <- colnames(definition_data_head)
   
-  # Columnas de haplotype_shifted que existen en rsid_order
-  cols_in_haplo <- intersect(rsid_order, colnames(haplotype_shifted))
+  # Identify columns that exist in both the definition and haplotype tables
+  common_columns <- intersect(rsid_order, colnames(haplotype_wide))
   
-  # Seleccionar solo esas columnas en haplotype_shifted
-  haplo_subset <- haplotype_shifted %>% select(all_of(cols_in_haplo))
+  # Subset the haplotype table to keep only the rsIDs present in definition table
+  haplo_subset <- haplotype_wide %>% select(all_of(common_columns))
   
-  # Crear un data.frame vacío con columnas en el orden de rsid_order y el número de filas de haplo_subset
-  empty_df <- as.data.frame(matrix(NA, nrow = nrow(haplo_subset), ncol = length(rsid_order)))
-  colnames(empty_df) <- rsid_order
+  # Create an empty data frame with same column order as definition table
+  aligned_df <- as.data.frame(matrix(NA, nrow = nrow(haplo_subset), ncol = length(rsid_order)))
+  colnames(aligned_df) <- rsid_order
   
-  # Rellenar las columnas existentes con datos de haplo_subset
-  empty_df[ , cols_in_haplo] <- haplo_subset
+  # Copy matching columns from haplotype data into the aligned data frame
+  aligned_df[, common_columns] <- haplo_subset
   
-  # Finalmente, unir filas
-  combined <- bind_rows(definition_data_head, empty_df)
+  # Add the reference row from allele definition on top of aligned haplotypes
+  combined <- bind_rows(definition_data_head, aligned_df)
   
-  # Recorremos cada columna
+  # Fill in any missing values (NA) using the first row (reference values)
   for (col in colnames(combined)) {
-    # Tomamos el valor de la primera fila para esa columna
-    fill_value <- combined[[col]][1]
-    
-    # Reemplazamos NA por ese valor
-    combined[[col]][is.na(combined[[col]])] <- fill_value
+    reference_value <- combined[[col]][1]
+    combined[[col]][is.na(combined[[col]])] <- reference_value
   }
   
-  # 1. Reemplazar el nombre de columnas (header) de combined por el de definition_data_filtered
+  # Restore the original column names from the full allele definition
   colnames(combined) <- colnames(definition_data)
   
-  # 2. Tomar las primeras 6 filas de definition_data_filtered
-  first_six_rows <- definition_data[1:6, ]
+  # ----------------------------------------------------------
+  # Step 4: Merge header and metadata rows back into final table
+  # ----------------------------------------------------------
   
-  # 3. Agregar esas filas arriba de combined
-  combined_final <- bind_rows(first_six_rows, combined)
+  # Recover top 6 metadata rows (originally at the top of the file)
+  header_rows <- definition_data[1:6, ]
   
-  # Buscar filas en definition_data que no están en combined_final
-  # Asegúrate de usar el nombre de la columna correctamente
+  # Combine everything: metadata + cleaned reference + new haplotypes
+  combined_final <- bind_rows(header_rows, combined)
+  
+  # Append any remaining rows from original file not already included
+  # (e.g., annotations or unusual haplotypes at the bottom)
   missing_rows <- definition_data %>%
     filter(!(definition_data[[1]] %in% combined_final[[1]]))
-  
-  # Agregar las filas faltantes al final de combined_final
   combined_final <- bind_rows(combined_final, missing_rows)
   
-  # Nombre de la primera columna
-  column_name <- colnames(combined_final)[1]  # Nombre de la primera columna
+  # ----------------------------------------------------------
+  # Step 5: Sort rows by numeric value extracted from first column
+  # ----------------------------------------------------------
   
-  # Dividir las filas
-  first_six_rows <- combined_final[1:6, ]  # Las primeras 6 filas
-  remaining_rows <- combined_final[7:nrow(combined_final), ]  # Filas a partir de la fila 7
+  # Extract name of the first column (typically the allele/haplotype name)
+  id_col <- colnames(combined_final)[1]
   
-  # Extraer la parte numérica para ordenación
-  remaining_rows <- remaining_rows %>%
-    mutate(NumericPart = as.numeric(gsub("[^0-9.]", "", .data[[column_name]]))) %>%  # Extraer número
-    arrange(NumericPart) %>%  # Ordenar por la parte numérica
-    select(-NumericPart)  # Eliminar columna auxiliar
+  # Separate metadata and allele rows
+  metadata_rows <- combined_final[1:6, ]
+  allele_rows <- combined_final[7:nrow(combined_final), ]
   
-  # Combinar nuevamente las tablas
-  combined_final <- bind_rows(first_six_rows, remaining_rows)
+  # Extract the numeric part from identifiers like "*1", "*2A", "*41" for sorting
+  allele_rows <- allele_rows %>%
+    mutate(NumericPart = as.numeric(gsub("[^0-9.]", "", .data[[id_col]]))) %>%
+    arrange(NumericPart) %>%
+    select(-NumericPart)
   
-  # Resultado
-  print("Tabla combinada y ordenada:")
-  print(combined_final)
+  # Combine again after sorting
+  combined_final <- bind_rows(metadata_rows, allele_rows)
   
-  # Paso 4: Guardar la tabla actualizada
+  # ----------------------------------------------------------
+  # Step 6: Save output to CSV
+  # ----------------------------------------------------------
+  
   output_file <- file.path(output_folder, paste0(gene, "_merged_table.csv"))
   write.csv(combined_final, output_file, row.names = FALSE)
-  cat("Tabla mergeada guardada en:", output_file, "\n")
+  
+  cat("✓ Merged table saved to:", output_file, "\n")
 }
