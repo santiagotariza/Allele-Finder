@@ -1,21 +1,24 @@
-# **Allele-Finder**
+# 🧬 Allele-Finder
 
-## **Genetic Data Processing and Analysis Tool**
+![R](https://img.shields.io/badge/R-%23276DC3.svg?style=for-the-badge&logo=r&logoColor=white)
+![Shiny](https://img.shields.io/badge/shiny-%23007BC2.svg?style=for-the-badge&logo=rstudio&logoColor=white)
+![RenV](https://img.shields.io/badge/renv-%23E34F26.svg?style=for-the-badge&logo=r&logoColor=white)
+![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)
 
-Allele-Finder is a robust R-based application designed to streamline the processing, analysis, and filtering of genetic data, specifically focusing on sample genotypes and Copy Number Variations (CNVs). It provides a structured pipeline from raw input files to filtered analytical outputs, all managed through an intuitive Shiny user interface.
+**Allele-Finder** is a robust **R-based application** designed to streamline the processing, analysis, and filtering of genetic data, specifically focusing on sample genotypes and **Copy Number Variations (CNVs)**. It provides a structured pipeline from raw input files to filtered analytical outputs, all managed through an intuitive **Shiny user interface**.
 
-## **Features**
+## 📋 Features
 
--   **Sample Processing**: Prepares raw sample data, extracting and merging genotype information from .zip archives.
--   **CNV Processing**: Consolidates and validates Copy Number Variation data from various .csv files.
--   **Database Creation (Optional)**: Generates a reference database (db.csv) from a specified input file, allowing on-demand regeneration.
--   **Allele Search**: Performs searches against the processed sample data and the reference database to identify genotype matches.
--   **Data Filtering**: Applies a sophisticated filtering logic to the search results, comparing Hs columns between matched data and CNV database entries.
--   **User-Friendly Interface**: A Shiny application provides an easy-to-use graphical interface for controlling the workflow and viewing progress.
+- **🔹 Sample Processing:** Prepares raw sample data, extracting and merging genotype information from `.zip` archives.
+- **🔹 CNV Processing:** Consolidates and validates Copy Number Variation data from various `.csv` files.
+- **🔹 Database Creation (Optional):** Generates a reference database (`db.csv`) from a specified input file, allowing on-demand regeneration.
+- **🔹 Allele Search:** Performs searches against the processed sample data and the reference database to identify genotype matches.
+- **🔹 Data Filtering:** Applies a sophisticated filtering logic to the search results, comparing `Hs` columns between matched data and CNV database entries.
+- **🔹 User-Friendly Interface:** A **Shiny application** provides an easy-to-use graphical interface for controlling the workflow and viewing progress.
 
-## **Folder Structure**
+## 📂 Folder Structure
 
-``` bash
+```text
 .
 ├── app.R                # The Shiny application (user interface)
 ├── main.R               # Main script that orchestrates the execution flow
@@ -29,7 +32,7 @@ Allele-Finder is a robust R-based application designed to streamline the process
 ├── input_cnvs/          # Folder for CNVs input files (e.g., .csv files)
 ├── samples/             # Folder for sample .zip files (and where processed sample files are saved)
 ├── db/                  # Folder where db.csv is saved (output of create_db.R)
-├── db_generation_scripts/        # Folder containing scripts for future db auto-generation (Still working on it :D)
+├── db_generation_scripts/ # Scripts for future db auto-generation (In progress :D)
 │   ├── 1_data_retrival.R
 │   ├── 2_data_format.R
 │   ├── 3_data_fill.R
@@ -43,69 +46,76 @@ Allele-Finder is a robust R-based application designed to streamline the process
 ├── Allele-Finder.Rproj  # RStudio project file
 ├── renv/                # renv environment folder
 │   ├── activate.R
-│   ├── settings.json
+│   └── settings.json
 ├── renv.lock            # renv lockfile
 └── README.md            # This file
 ```
 
--   **Root Directory (.):** This is the main project folder where app.R and main.R should be located. All other paths are relative to this root.
--   **scripts/:** Contains the modular R scripts for each processing step, enhancing code organization and re-usability.
--   **input\_\* directories:** Designated for your raw input data files.
--   **output\* directories:** Automatically created by the program to store intermediate and final processed results.
--   **db_generation_scripts/** Scripts for a future self-generate db implementation. (At the moment builds the whole table but needs to be adapted)
+* **Root Directory (`.`):** Contains `app.R` and `main.R`. All other paths are relative to this root.
+* **`scripts/`:** Modular R scripts for each processing step, enhancing code organization and re-usability.
+* **`input_*` directories:** Designated for your raw input data files.
+* **`output*` directories:** Automatically created by the program to store intermediate and final processed results.
+* **`db_generation_scripts/`:** Experimental scripts for self-generating the DB implementation.
 
-## **Installation & Setup (Automated)**
+## ⚙️ Installation & Setup (Automated)
 
-Allele-Finder utilizes `renv` for robust package management, ensuring a reproducible environment across different machines.
+Allele-Finder utilizes **`renv`** for robust package management, ensuring a reproducible environment across different machines.
 
-1.  **Install R and RStudio:** If you don't have them, download and install the latest versions of [R](https://cran.r-project.org/) and [RStudio Desktop](https://posit.co/download/rstudio-desktop/) for your operating system.
-    -   **For Windows users:** If you plan to install R packages that require compilation (e.g., those with C, C++, or FORTRAN code, like `curl` or many `tidyverse` dependencies), you will also need to install **RTools**. Download the appropriate version of RTools for your R installation from <https://cran.r-project.org/bin/windows/Rtools/> and follow the installation instructions.
-2.  **Clone the Repository:** Clone this GitHub repository to your local machine:
+### 1. Install R and RStudio
+If you don't have them, download and install the latest versions of [R](https://cran.r-project.org/) and [RStudio Desktop](https://posit.co/download/rstudio-desktop/).
 
-``` bash
-git clone https://github.com/santiagotariza/Allele-Finder/Allele-Finder.git
-```
+> **Note for Windows users:** If you plan to install R packages that require compilation (e.g., `curl` or `tidyverse`), you must install **RTools**. Download the appropriate version from [CRAN RTools](https://cran.r-project.org/bin/windows/Rtools/).
 
-``` bash
+### 2. Clone the Repository
+
+```bash
+git clone https://github.com/santiagotariza/Allele-Finder.git
 cd Allele-Finder
 ```
 
-3.  **Open Project and Restore Dependencies:**
-    -   Open the `.Rproj` file (`Allele-Finder.Rproj`) in RStudio.
-    -   **That's all for dependency setup!** The project is configured to automatically install `renv` (if needed) and restore all required packages when you open the project. You will see messages in the RStudio console indicating the restoration progress.
-    -   Once the console process indicates that the environment is synchronized, you are ready to use the application.
+### 3. Open Project and Restore Dependencies
+1. Open the `.Rproj` file (`Allele-Finder.Rproj`) in RStudio.
+2. **That's it!** The project is configured to automatically install `renv` and restore all required packages upon opening.
+3. Wait for the console to indicate that the environment is synchronized.
 
-## **Usage**
+## 🚀 Usage
 
-1.  **Prepare Input Data:**
-    -   Place your `AT*.csv` file(s) for the database in the `input_db/` folder.
-    -   Place your CNV `.csv` files in the `input_cnvs/` folder.
-    -   Place your sample `.zip` files in the `samples/` folder.
-2.  **Run the Allele-Finder Application:**
-    -   In RStudio, open the `app.R` file.
-    -   Click the "Run App" button in RStudio, or execute the following command in the R console: `R     shiny::runApp()`
-3.  **Interact with the App:**
-    -   The Allele-Finder application will open in your default web browser.
-    -   In the "Processing" tab, you can check the "Regenerate Database (create_db.R)" box if you want to rebuild `db.csv` from scratch.
-    -   Click the "Run Complete Workflow" button to start the data processing pipeline.
-    -   Monitor the "Processing Status" box for real-time updates and success/error messages.
-    -   The "Folder Configuration" tab provides a quick reference to the expected directory structure.
+### 1. Prepare Input Data
+* Place your `AT*.csv` file(s) for the database in **`input_db/`**.
+* Place your CNV `.csv` files in **`input_cnvs/`**.
+* Place your sample `.zip` files in **`samples/`**.
 
-## **Output Files**
+### 2. Run the Application
+In RStudio, open `app.R` and click the **"Run App"** button, or execute:
 
-Upon successful execution, the following output files will be generated in their respective directories:
+```r
+shiny::runApp()
+```
 
--   **samples/**: Processed sample files (e.g., `XMV33_Genotype_Matrix_short.csv`)
--   **cnvs/cnvs.csv**: The consolidated CNV database.
--   **db/db.csv**: The main genetic reference database.
--   **output/**: Search result files (e.g., `XMV33_Genotype_Matrix_short_matches.csv`).
--   **output_processed/**: Filtered output files (e.g., `XMV33_Genotype_Matrix_short_filtered.csv`).
+### 3. Interact with the App
+* The application will open in your default web browser.
+* In the **"Processing"** tab, verify options (e.g., check "Regenerate Database" if needed).
+* Click **"Run Complete Workflow"** to start the pipeline.
+* Monitor the **"Processing Status"** box for real-time updates.
 
-## **Troubleshooting**
+## 📄 Output Files
 
--   **"ERROR: Folder '...' does not exist."**: Ensure all input folders (`input_db`, `input_cnvs`, `samples`) exist and contain the necessary files. The output folders (`db`, `cnvs`, `output`, `output_processed`) will be created automatically.
--   **R Packages / `renv` Issues**: If the application fails to start or throws errors about missing functions despite the automated restoration process appearing complete, try running `renv::restore()` manually in the R console. If `renv` could not be installed automatically, follow the message in the console to install it manually (`install.packages("renv")`) and then reopen the project.
--   **File Format Issues**: The scripts rely on specific CSV formats. If errors persist, verify that your input `.csv` files (especially `AT*.csv` and CNV files) match the expected structure as processed by `create_db.R` and `cnvs_processing.R`.
--   **"Hs" Column Discrepancies**: If the filtering step gives unexpected results, double-check that the Hs column names (e.g., `Hs04083572`, `Hs00010001110_14`) in both your `_matches.csv` files and `cnvs.csv` are as expected. The script now handles `_cn` suffixes in `cnvs_db`.
+Upon successful execution, the following files will be generated:
 
-**Allele-Finder** is designed to simplify your genetic data analysis workflow. For any issues or suggestions, please open an issue on this repository.
+| Directory | File Example | Description |
+| :--- | :--- | :--- |
+| **samples/** | `XMV33_Genotype_Matrix_short.csv` | Processed sample files. |
+| **cnvs/** | `cnvs.csv` | Consolidated CNV database. |
+| **db/** | `db.csv` | Main genetic reference database. |
+| **output/** | `..._matches.csv` | Search result files. |
+| **output_processed/** | `..._filtered.csv` | Final filtered output files. |
+
+## 🛠️ Troubleshooting
+
+* **"ERROR: Folder '...' does not exist"**: Ensure all input folders (`input_db`, `input_cnvs`, `samples`) exist. Output folders are created automatically.
+* **`renv` Issues**: If dependencies fail to load, try running `renv::restore()` manually in the R console.
+* **File Format Issues**: Verify that input `.csv` files match the expected structure required by `create_db.R` and `cnvs_processing.R`.
+* **"Hs" Column Discrepancies**: Ensure `Hs` column names (e.g., `Hs04083572`) match between matched data and `cnvs.csv`. The script handles `_cn` suffixes automatically.
+
+---
+&copy; 2025 Santiago T. Ariza - For issues or suggestions, please open an issue on this repository.
